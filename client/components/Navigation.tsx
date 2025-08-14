@@ -39,16 +39,28 @@ export function Navigation() {
                   <span>Deploy</span>
                 </Button>
               </Link>
+              <Link to="/documents">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                  <FileText className="h-4 w-4" />
+                  <span>Documents</span>
+                </Button>
+              </Link>
+              <Link to="/chat">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                  <MessageSquare className="h-4 w-4" />
+                  <span>Chat</span>
+                </Button>
+              </Link>
+              <Link to="/workflows">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                  <Workflow className="h-4 w-4" />
+                  <span>Workflows</span>
+                </Button>
+              </Link>
               <Link to="/manage">
                 <Button variant="ghost" size="sm" className="flex items-center space-x-2">
                   <Settings className="h-4 w-4" />
                   <span>Manage</span>
-                </Button>
-              </Link>
-              <Link to="/monitoring">
-                <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                  <Activity className="h-4 w-4" />
-                  <span>Monitoring</span>
                 </Button>
               </Link>
             </div>
