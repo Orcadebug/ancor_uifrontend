@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { 
-  Brain, 
-  LayoutDashboard, 
-  Rocket, 
-  Settings, 
+import {
+  Brain,
+  LayoutDashboard,
+  Rocket,
+  Settings,
   Activity,
   Users,
-  Shield
+  Shield,
+  FileText,
+  MessageSquare,
+  Workflow
 } from "lucide-react";
 
 export function Navigation() {
