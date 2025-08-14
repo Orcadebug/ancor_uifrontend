@@ -91,28 +91,30 @@ export default function Index() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
+              <Link to="/documents" className="block">
+                <Button variant="outline" className="w-full justify-start">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Upload Documents
+                </Button>
+              </Link>
+              <Link to="/chat" className="block">
+                <Button variant="outline" className="w-full justify-start">
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Ask AI Assistant
+                </Button>
+              </Link>
+              <Link to="/workflows" className="block">
+                <Button variant="outline" className="w-full justify-start">
+                  <Workflow className="h-4 w-4 mr-2" />
+                  Create Workflow
+                </Button>
+              </Link>
               <Link to="/deploy" className="block">
                 <Button variant="outline" className="w-full justify-start">
                   <Rocket className="h-4 w-4 mr-2" />
-                  Deploy New Model
+                  Deploy New System
                 </Button>
               </Link>
-              <Link to="/manage" className="block">
-                <Button variant="outline" className="w-full justify-start">
-                  <Shield className="h-4 w-4 mr-2" />
-                  Manage Instances
-                </Button>
-              </Link>
-              <Link to="/monitoring" className="block">
-                <Button variant="outline" className="w-full justify-start">
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  View Analytics
-                </Button>
-              </Link>
-              <Button variant="outline" className="w-full justify-start">
-                <AlertTriangle className="h-4 w-4 mr-2" />
-                Setup Alerts
-              </Button>
             </CardContent>
           </Card>
         </div>
