@@ -35,15 +35,15 @@ export default function Index() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">AI Infrastructure Dashboard</h1>
+              <h1 className="text-3xl font-bold text-foreground">AI Document Processing Platform</h1>
               <p className="text-muted-foreground mt-2">
-                Manage and monitor your AI model deployments across cloud providers
+                Intelligent document analysis powered by LLaMA 3 and automated workflows
               </p>
             </div>
             <Link to="/deploy">
               <Button size="lg" className="flex items-center space-x-2">
                 <Rocket className="h-5 w-5" />
-                <span>Deploy New Model</span>
+                <span>Deploy AI System</span>
               </Button>
             </Link>
           </div>
@@ -52,32 +52,32 @@ export default function Index() {
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <MetricCard
-            title="Active Deployments"
-            value="12"
-            icon={Brain}
-            trend={{ value: "+2 this week", isPositive: true }}
+            title="Documents Processed"
+            value="2,847"
+            icon={FileText}
+            trend={{ value: "+156 today", isPositive: true }}
             color="text-primary"
           />
           <MetricCard
-            title="API Requests (24h)"
-            value="24.8K"
-            icon={Activity}
-            trend={{ value: "+12.5%", isPositive: true }}
+            title="AI Queries (24h)"
+            value="1,245"
+            icon={MessageSquare}
+            trend={{ value: "+23.5%", isPositive: true }}
             color="text-green-600"
           />
           <MetricCard
-            title="Avg Response Time"
-            value="247ms"
+            title="Avg Processing Time"
+            value="2.1s"
             icon={Zap}
-            trend={{ value: "-15ms", isPositive: true }}
+            trend={{ value: "-0.4s", isPositive: true }}
             color="text-blue-600"
           />
           <MetricCard
-            title="Monthly Cost"
-            value="$1,247"
-            icon={DollarSign}
-            trend={{ value: "+8.2%", isPositive: false }}
-            color="text-orange-600"
+            title="Active Workflows"
+            value="12"
+            icon={Workflow}
+            trend={{ value: "+3 this week", isPositive: true }}
+            color="text-purple-600"
           />
         </div>
 
