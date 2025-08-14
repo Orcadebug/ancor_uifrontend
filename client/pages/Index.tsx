@@ -3,15 +3,25 @@ import { MetricCard } from "@/components/MetricCard";
 import { DeploymentStatus } from "@/components/DeploymentStatus";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Activity, 
-  DollarSign, 
-  Zap, 
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import {
+  Activity,
+  DollarSign,
+  Zap,
   AlertTriangle,
   TrendingUp,
   Rocket,
   Brain,
-  Shield
+  Shield,
+  FileText,
+  MessageSquare,
+  Workflow,
+  Database,
+  Clock,
+  Users,
+  Target,
+  Sparkles
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
