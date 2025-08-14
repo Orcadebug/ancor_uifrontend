@@ -9,6 +9,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Deploy from "./pages/Deploy";
 import Manage from "./pages/Manage";
+import Documents from "./pages/Documents";
+import Chat from "./pages/Chat";
+import Workflows from "./pages/Workflows";
 import Monitoring from "./pages/Monitoring";
 import NotFound from "./pages/NotFound";
 
