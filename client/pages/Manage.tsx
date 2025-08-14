@@ -288,11 +288,11 @@ export default function Manage() {
                       <CardContent>
                         <div className="space-y-4">
                           <div>
-                            <label className="text-sm">Scale up when CPU > 70%</label>
+                            <label className="text-sm">Scale up when CPU exceeds 70%</label>
                             <p className="text-xs text-muted-foreground">Add instances automatically</p>
                           </div>
                           <div>
-                            <label className="text-sm">Scale down when CPU < 30%</label>
+                            <label className="text-sm">Scale down when CPU below 30%</label>
                             <p className="text-xs text-muted-foreground">Remove unnecessary instances</p>
                           </div>
                           <div>
@@ -309,11 +309,11 @@ export default function Manage() {
                       <CardContent>
                         <div className="space-y-4">
                           <div>
-                            <label className="text-sm">Scale up when requests > 1000/min</label>
+                            <label className="text-sm">Scale up when requests exceed 1000/min</label>
                             <p className="text-xs text-muted-foreground">Handle traffic spikes</p>
                           </div>
                           <div>
-                            <label className="text-sm">Scale down when requests < 100/min</label>
+                            <label className="text-sm">Scale down when requests below 100/min</label>
                             <p className="text-xs text-muted-foreground">Reduce costs during low traffic</p>
                           </div>
                         </div>
