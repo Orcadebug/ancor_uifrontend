@@ -119,33 +119,132 @@ export default function Index() {
           </Card>
         </div>
 
+        {/* Document Processing Stats */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Database className="h-5 w-5" />
+                <span>Document Library</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Legal Contracts</span>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={75} className="w-24" />
+                    <span className="text-sm font-medium">456</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Financial Reports</span>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={60} className="w-24" />
+                    <span className="text-sm font-medium">234</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Meeting Notes</span>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={45} className="w-24" />
+                    <span className="text-sm font-medium">189</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Research Papers</span>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={30} className="w-24" />
+                    <span className="text-sm font-medium">78</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Target className="h-5 w-5" />
+                <span>AI Performance</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Query Accuracy</span>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={94} className="w-24" />
+                    <span className="text-sm font-medium">94%</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Document Confidence</span>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={89} className="w-24" />
+                    <span className="text-sm font-medium">89%</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Workflow Success</span>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={97} className="w-24" />
+                    <span className="text-sm font-medium">97%</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">User Satisfaction</span>
+                  <div className="flex items-center space-x-2">
+                    <Progress value={92} className="w-24" />
+                    <span className="text-sm font-medium">4.6/5</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle className="flex items-center space-x-2">
+              <Clock className="h-5 w-5" />
+              <span>Recent Activity</span>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center space-x-4 p-3 border rounded-lg">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">GPT-4 Production deployment successful</p>
-                  <p className="text-xs text-muted-foreground">AWS us-east-1 • 2 hours ago</p>
+                  <p className="text-sm font-medium">Document processed: Employment_Contract_2024.pdf</p>
+                  <p className="text-xs text-muted-foreground">Auto-summarized and indexed • 5 minutes ago</p>
                 </div>
+                <Badge variant="secondary">Legal</Badge>
               </div>
               <div className="flex items-center space-x-4 p-3 border rounded-lg">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">Claude-3 Staging scaled up to 3 instances</p>
-                  <p className="text-xs text-muted-foreground">Google Cloud us-central1 • 4 hours ago</p>
+                  <p className="text-sm font-medium">Workflow "Daily Digest" completed successfully</p>
+                  <p className="text-xs text-muted-foreground">Email sent to 12 stakeholders • 2 hours ago</p>
                 </div>
+                <Badge variant="secondary">Automation</Badge>
+              </div>
+              <div className="flex items-center space-x-4 p-3 border rounded-lg">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">AI query: "Compare Q3 vs Q4 financial performance"</p>
+                  <p className="text-xs text-muted-foreground">Complex analysis completed in 3.2s • 4 hours ago</p>
+                </div>
+                <Badge variant="secondary">Analysis</Badge>
               </div>
               <div className="flex items-center space-x-4 p-3 border rounded-lg">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">Cost alert: Monthly spend at 85% of limit</p>
-                  <p className="text-xs text-muted-foreground">All providers • 6 hours ago</p>
+                  <p className="text-sm font-medium">LLaMA 3 70B system deployed successfully</p>
+                  <p className="text-xs text-muted-foreground">CoreWeave us-east-1 • 6 hours ago</p>
                 </div>
+                <Badge variant="secondary">Infrastructure</Badge>
               </div>
             </div>
           </CardContent>
