@@ -7,7 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import { 
+  Scale,
+  Heart,
+  DollarSign,
+  Users,
   Brain, 
   Cpu, 
   Globe, 
@@ -16,324 +21,629 @@ import {
   CheckCircle,
   ArrowRight,
   ArrowLeft,
-  Cloud,
-  Zap,
+  Database,
   Shield,
-  DollarSign
+  Zap,
+  FileText,
+  MessageSquare,
+  Workflow,
+  BarChart3,
+  Lock,
+  Server
 } from "lucide-react";
 
 interface DeploymentConfig {
+  industry: string;
+  useCase: string;
   model: string;
-  modelSize: string;
-  provider: string;
   region: string;
-  instanceType: string;
-  apiKey: string;
-  rateLimiting: string;
-  ipAllowlist: string;
+  compliance: string;
+  organization: string;
+  teamSize: string;
+  documentVolume: string;
 }
 
-const models = [
-  { id: "gpt-4", name: "GPT-4", provider: "OpenAI", description: "Most capable model, best for complex tasks" },
-  { id: "claude-3", name: "Claude-3", provider: "Anthropic", description: "Great for analysis and creative tasks" },
-  { id: "llama-2-70b", name: "Llama 2 70B", provider: "Meta", description: "Open source, good for general tasks" },
-  { id: "custom", name: "Custom Model", provider: "Your Model", description: "Deploy your own fine-tuned model" }
+const industries = [
+  { 
+    id: "legal", 
+    name: "Legal", 
+    icon: Scale, 
+    description: "Contracts, case files, briefs, legal research",
+    useCases: ["Contract Analysis", "Legal Research", "Case Management", "Due Diligence", "Compliance Review"]
+  },
+  { 
+    id: "healthcare", 
+    name: "Healthcare", 
+    icon: Heart, 
+    description: "Patient records, research docs, clinical data",
+    useCases: ["Medical Records Analysis", "Clinical Research", "Treatment Planning", "Drug Discovery", "Regulatory Documentation"]
+  },
+  { 
+    id: "finance", 
+    name: "Finance", 
+    icon: DollarSign, 
+    description: "Reports, compliance docs, investment analysis",
+    useCases: ["Financial Analysis", "Risk Assessment", "Compliance Monitoring", "Investment Research", "Audit Documentation"]
+  },
+  { 
+    id: "professional", 
+    name: "Professional Services", 
+    icon: Users, 
+    description: "Proposals, client docs, project management",
+    useCases: ["Proposal Generation", "Client Communication", "Project Documentation", "Knowledge Management", "Business Intelligence"]
+  }
 ];
 
-const providers = [
-  { id: "aws", name: "Amazon Web Services", icon: "☁️", regions: ["us-east-1", "us-west-2", "eu-west-1", "ap-southeast-1"] },
-  { id: "gcp", name: "Google Cloud Platform", icon: "🌐", regions: ["us-central1", "us-east1", "europe-west1", "asia-southeast1"] },
-  { id: "azure", name: "Microsoft Azure", icon: "⚡", regions: ["eastus", "westus2", "westeurope", "southeastasia"] }
+const models = [
+  { 
+    id: "llama-3-8b", 
+    name: "LLaMA 3 8B", 
+    type: "Lightweight",
+    price: 300,
+    description: "Perfect for basic document analysis and small teams",
+    specs: "8 billion parameters • 4-16GB VRAM • Up to 1M tokens/day",
+    recommended: false
+  },
+  { 
+    id: "llama-3-70b", 
+    name: "LLaMA 3 70B", 
+    type: "Recommended",
+    price: 1200,
+    description: "Ideal balance of performance and cost for most organizations",
+    specs: "70 billion parameters • 40-80GB VRAM • Up to 10M tokens/day",
+    recommended: true
+  },
+  { 
+    id: "llama-3-405b", 
+    name: "LLaMA 3 405B", 
+    type: "Enterprise",
+    price: 3000,
+    description: "Maximum performance for large-scale enterprise deployments",
+    specs: "405 billion parameters • 200GB+ VRAM • Up to 100M tokens/day",
+    recommended: false
+  }
+];
+
+const regions = [
+  { id: "us-east", name: "US-East", location: "Virginia", latency: "~20ms" },
+  { id: "us-west", name: "US-West", location: "California", latency: "~15ms" },
+  { id: "eu-central", name: "EU-Central", location: "Frankfurt", latency: "~25ms" }
+];
+
+const compliancePresets = [
+  { id: "soc2", name: "SOC 2", description: "Security and availability controls" },
+  { id: "hipaa", name: "HIPAA", description: "Healthcare data protection" },
+  { id: "legal", name: "Legal Industry", description: "Attorney-client privilege protection" },
+  { id: "gdpr", name: "GDPR", description: "EU data protection regulations" }
 ];
 
 export default function Deploy() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [deploymentProgress, setDeploymentProgress] = useState(0);
+  const [isDeploying, setIsDeploying] = useState(false);
   const [config, setConfig] = useState<DeploymentConfig>({
+    industry: "",
+    useCase: "",
     model: "",
-    modelSize: "",
-    provider: "",
     region: "",
-    instanceType: "",
-    apiKey: "",
-    rateLimiting: "1000",
-    ipAllowlist: ""
+    compliance: "",
+    organization: "",
+    teamSize: "",
+    documentVolume: ""
   });
 
   const steps = [
-    { number: 1, title: "Choose AI Model", icon: Brain },
-    { number: 2, title: "Infrastructure", icon: Cloud },
-    { number: 3, title: "Configuration", icon: Settings },
-    { number: 4, title: "Deploy", icon: Rocket }
+    { number: 1, title: "Industry & Use Case", icon: Scale },
+    { number: 2, title: "Model Selection", icon: Brain },
+    { number: 3, title: "Infrastructure", icon: Server },
+    { number: 4, title: "Deploy System", icon: Rocket }
   ];
 
   const canProceed = () => {
     switch (currentStep) {
-      case 1: return config.model && config.modelSize;
-      case 2: return config.provider && config.region && config.instanceType;
-      case 3: return config.apiKey && config.rateLimiting;
+      case 1: return config.industry && config.useCase;
+      case 2: return config.model;
+      case 3: return config.region && config.compliance && config.organization;
       default: return true;
     }
   };
 
+  const selectedIndustry = industries.find(i => i.id === config.industry);
+
+  const startDeployment = async () => {
+    setIsDeploying(true);
+    setDeploymentProgress(0);
+    
+    // Simulate deployment progress
+    const steps = [
+      { progress: 10, message: "Provisioning CoreWeave GPU instances..." },
+      { progress: 25, message: "Setting up dual A100 GPUs for LLaMA 3 70B..." },
+      { progress: 40, message: "Configuring vLLM with quantized model..." },
+      { progress: 55, message: "Deploying ChromaDB vector storage cluster..." },
+      { progress: 70, message: "Setting up LlamaIndex RAG pipeline..." },
+      { progress: 85, message: "Configuring n8n workflow automation..." },
+      { progress: 95, message: "Deploying Streamlit chat interface..." },
+      { progress: 100, message: "System deployment complete!" }
+    ];
+
+    for (const step of steps) {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setDeploymentProgress(step.progress);
+    }
+  };
+
   const renderStep1 = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Select AI Model</h3>
+        <h3 className="text-xl font-semibold mb-2">Select Your Industry</h3>
+        <p className="text-muted-foreground mb-6">
+          Choose your industry to get pre-configured templates and compliance settings
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {models.map((model) => (
-            <Card 
-              key={model.id}
-              className={`cursor-pointer transition-all hover:shadow-md ${
-                config.model === model.id ? 'ring-2 ring-primary' : ''
-              }`}
-              onClick={() => setConfig(prev => ({ ...prev, model: model.id }))}
-            >
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium">{model.name}</h4>
-                  <Badge variant="outline">{model.provider}</Badge>
-                </div>
-                <p className="text-sm text-muted-foreground">{model.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+          {industries.map((industry) => {
+            const IconComponent = industry.icon;
+            return (
+              <Card 
+                key={industry.id}
+                className={`cursor-pointer transition-all hover:shadow-lg ${
+                  config.industry === industry.id ? 'ring-2 ring-primary bg-primary/5' : ''
+                }`}
+                onClick={() => setConfig(prev => ({ ...prev, industry: industry.id, useCase: "" }))}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-primary/10 p-3 rounded-lg">
+                      <IconComponent className="h-6 w-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-lg mb-2">{industry.name}</h4>
+                      <p className="text-sm text-muted-foreground mb-3">{industry.description}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {industry.useCases.slice(0, 3).map((useCase, index) => (
+                          <Badge key={index} variant="secondary" className="text-xs">
+                            {useCase}
+                          </Badge>
+                        ))}
+                        {industry.useCases.length > 3 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{industry.useCases.length - 3} more
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
 
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Model Size & Performance</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {["small", "medium", "large"].map((size) => (
-            <Card 
-              key={size}
-              className={`cursor-pointer transition-all hover:shadow-md ${
-                config.modelSize === size ? 'ring-2 ring-primary' : ''
-              }`}
-              onClick={() => setConfig(prev => ({ ...prev, modelSize: size }))}
-            >
-              <CardContent className="p-4 text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <Cpu className="h-6 w-6 text-primary" />
-                </div>
-                <h4 className="font-medium capitalize">{size}</h4>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {size === "small" && "Fast & Cost-effective"}
-                  {size === "medium" && "Balanced Performance"}
-                  {size === "large" && "Maximum Capability"}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
+      {config.industry && selectedIndustry && (
+        <div>
+          <h3 className="text-xl font-semibold mb-2">Primary Use Case</h3>
+          <p className="text-muted-foreground mb-4">
+            What's your main use case for AI document processing?
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {selectedIndustry.useCases.map((useCase) => (
+              <Card 
+                key={useCase}
+                className={`cursor-pointer transition-all hover:shadow-md ${
+                  config.useCase === useCase ? 'ring-2 ring-primary bg-primary/5' : ''
+                }`}
+                onClick={() => setConfig(prev => ({ ...prev, useCase }))}
+              >
+                <CardContent className="p-4 text-center">
+                  <p className="font-medium">{useCase}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 
   const renderStep2 = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Cloud Provider</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {providers.map((provider) => (
+        <h3 className="text-xl font-semibold mb-2">Choose Your LLaMA 3 Model</h3>
+        <p className="text-muted-foreground mb-6">
+          Select the model size based on your performance needs and budget
+        </p>
+        <div className="space-y-4">
+          {models.map((model) => (
             <Card 
-              key={provider.id}
-              className={`cursor-pointer transition-all hover:shadow-md ${
-                config.provider === provider.id ? 'ring-2 ring-primary' : ''
-              }`}
-              onClick={() => setConfig(prev => ({ ...prev, provider: provider.id, region: "" }))}
+              key={model.id}
+              className={`cursor-pointer transition-all hover:shadow-lg ${
+                config.model === model.id ? 'ring-2 ring-primary bg-primary/5' : ''
+              } ${model.recommended ? 'border-primary' : ''}`}
+              onClick={() => setConfig(prev => ({ ...prev, model: model.id }))}
             >
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl mb-2">{provider.icon}</div>
-                <h4 className="font-medium">{provider.name}</h4>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-primary/10 p-3 rounded-lg">
+                      <Brain className="h-8 w-8 text-primary" />
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <h4 className="text-xl font-bold">{model.name}</h4>
+                        {model.recommended && (
+                          <Badge className="bg-green-100 text-green-800 border-green-200">
+                            Recommended
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground">{model.type}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-primary">${model.price}</p>
+                    <p className="text-sm text-muted-foreground">/month</p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground mb-3">{model.description}</p>
+                <p className="text-sm text-muted-foreground">{model.specs}</p>
               </CardContent>
             </Card>
           ))}
         </div>
       </div>
 
-      {config.provider && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <Label htmlFor="region">Region</Label>
-            <Select value={config.region} onValueChange={(value) => setConfig(prev => ({ ...prev, region: value }))}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select region" />
-              </SelectTrigger>
-              <SelectContent>
-                {providers.find(p => p.id === config.provider)?.regions.map((region) => (
-                  <SelectItem key={region} value={region}>{region}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+      <Card className="bg-muted/30 border-dashed">
+        <CardContent className="p-6 text-center">
+          <div className="mb-4">
+            <FileText className="h-12 w-12 text-muted-foreground mx-auto" />
           </div>
-
-          <div>
-            <Label htmlFor="instance">Suggested Instance Type</Label>
-            <Select value={config.instanceType} onValueChange={(value) => setConfig(prev => ({ ...prev, instanceType: value }))}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select instance" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="small">t3.medium - $50/month</SelectItem>
-                <SelectItem value="medium">c5.large - $120/month</SelectItem>
-                <SelectItem value="large">c5.2xlarge - $280/month</SelectItem>
-                <SelectItem value="gpu">p3.2xlarge - $900/month</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      )}
-
-      {config.instanceType && (
-        <Card className="bg-muted/50">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-4">
-              <DollarSign className="h-5 w-5 text-green-600" />
-              <div>
-                <h4 className="font-medium">Estimated Monthly Cost</h4>
-                <p className="text-sm text-muted-foreground">
-                  Based on your selections: ~$
-                  {config.instanceType === "small" ? "50" : 
-                   config.instanceType === "medium" ? "120" : 
-                   config.instanceType === "large" ? "280" : "900"}
-                  /month
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+          <h4 className="font-semibold mb-2">Custom Model Upload</h4>
+          <p className="text-sm text-muted-foreground mb-4">
+            Have your own fine-tuned model? Upload it for deployment
+          </p>
+          <Button variant="outline" disabled>
+            Coming Soon
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 
   const renderStep3 = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Security & API Configuration</h3>
-        <div className="grid grid-cols-1 gap-6">
+        <h3 className="text-xl font-semibold mb-2">Infrastructure Configuration</h3>
+        <p className="text-muted-foreground mb-6">
+          Auto-provision on CoreWeave with optimal GPU configuration
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <Cpu className="h-8 w-8 text-blue-600" />
+                <div>
+                  <h4 className="font-semibold">CoreWeave GPU Setup</h4>
+                  <p className="text-sm text-muted-foreground">Dual A100 80GB GPUs</p>
+                </div>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>GPU Memory:</span>
+                  <span className="font-medium">160GB Total</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Compute:</span>
+                  <span className="font-medium">312 TFLOPS</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Network:</span>
+                  <span className="font-medium">800 Gbps</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Organization Details</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="organization">Organization Name</Label>
+                <Input
+                  id="organization"
+                  placeholder="Your Company Inc."
+                  value={config.organization}
+                  onChange={(e) => setConfig(prev => ({ ...prev, organization: e.target.value }))}
+                />
+              </div>
+              <div>
+                <Label htmlFor="teamSize">Team Size</Label>
+                <Select value={config.teamSize} onValueChange={(value) => setConfig(prev => ({ ...prev, teamSize: value }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select team size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1-5">1-5 users</SelectItem>
+                    <SelectItem value="6-20">6-20 users</SelectItem>
+                    <SelectItem value="21-100">21-100 users</SelectItem>
+                    <SelectItem value="100+">100+ users</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="documentVolume">Expected Document Volume</Label>
+                <Select value={config.documentVolume} onValueChange={(value) => setConfig(prev => ({ ...prev, documentVolume: value }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Documents per month" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1-100">1-100 documents</SelectItem>
+                    <SelectItem value="101-1000">101-1,000 documents</SelectItem>
+                    <SelectItem value="1001-10000">1,001-10,000 documents</SelectItem>
+                    <SelectItem value="10000+">10,000+ documents</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <Label htmlFor="apiKey">API Key (Stored Securely)</Label>
-            <Input
-              id="apiKey"
-              type="password"
-              placeholder="Enter your API key"
-              value={config.apiKey}
-              onChange={(e) => setConfig(prev => ({ ...prev, apiKey: e.target.value }))}
-            />
+            <Label htmlFor="region">CoreWeave Region</Label>
+            <div className="mt-2 space-y-2">
+              {regions.map((region) => (
+                <Card 
+                  key={region.id}
+                  className={`cursor-pointer transition-all hover:shadow-md ${
+                    config.region === region.id ? 'ring-2 ring-primary bg-primary/5' : ''
+                  }`}
+                  onClick={() => setConfig(prev => ({ ...prev, region: region.id }))}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{region.name}</p>
+                        <p className="text-sm text-muted-foreground">{region.location}</p>
+                      </div>
+                      <Badge variant="outline">{region.latency}</Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
 
           <div>
-            <Label htmlFor="rateLimiting">Rate Limiting (requests per minute)</Label>
-            <Select value={config.rateLimiting} onValueChange={(value) => setConfig(prev => ({ ...prev, rateLimiting: value }))}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="100">100 RPM - Basic</SelectItem>
-                <SelectItem value="500">500 RPM - Standard</SelectItem>
-                <SelectItem value="1000">1000 RPM - Professional</SelectItem>
-                <SelectItem value="5000">5000 RPM - Enterprise</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="ipAllowlist">IP Allowlist (Optional)</Label>
-            <Textarea
-              id="ipAllowlist"
-              placeholder="192.168.1.1, 10.0.0.0/8 (one per line)"
-              value={config.ipAllowlist}
-              onChange={(e) => setConfig(prev => ({ ...prev, ipAllowlist: e.target.value }))}
-            />
-            <p className="text-xs text-muted-foreground mt-1">
-              Leave empty to allow all IPs
-            </p>
+            <Label htmlFor="compliance">Compliance Preset</Label>
+            <div className="mt-2 space-y-2">
+              {compliancePresets.map((preset) => (
+                <Card 
+                  key={preset.id}
+                  className={`cursor-pointer transition-all hover:shadow-md ${
+                    config.compliance === preset.id ? 'ring-2 ring-primary bg-primary/5' : ''
+                  }`}
+                  onClick={() => setConfig(prev => ({ ...prev, compliance: preset.id }))}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <Shield className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="font-medium">{preset.name}</p>
+                        <p className="text-sm text-muted-foreground">{preset.description}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-muted/50">
-          <CardContent className="p-4 text-center">
-            <Shield className="h-6 w-6 text-green-600 mx-auto mb-2" />
-            <h4 className="font-medium">Encrypted Storage</h4>
-            <p className="text-xs text-muted-foreground">API keys encrypted at rest</p>
-          </CardContent>
-        </Card>
-        <Card className="bg-muted/50">
-          <CardContent className="p-4 text-center">
-            <Zap className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-            <h4 className="font-medium">Auto-scaling</h4>
-            <p className="text-xs text-muted-foreground">Handles traffic spikes</p>
-          </CardContent>
-        </Card>
-        <Card className="bg-muted/50">
-          <CardContent className="p-4 text-center">
-            <Globe className="h-6 w-6 text-purple-600 mx-auto mb-2" />
-            <h4 className="font-medium">Global CDN</h4>
-            <p className="text-xs text-muted-foreground">Low latency worldwide</p>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
 
   const renderStep4 = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="text-center">
-        <h3 className="text-lg font-semibold mb-4">Review & Deploy</h3>
-        <p className="text-muted-foreground">
-          Review your configuration and deploy your AI model
+        <h3 className="text-xl font-semibold mb-2">Complete System Deployment</h3>
+        <p className="text-muted-foreground mb-6">
+          We'll automatically provision your entire AI document processing stack
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Deployment Summary</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Model</p>
-              <p className="font-medium">{models.find(m => m.id === config.model)?.name}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Size</p>
-              <p className="font-medium capitalize">{config.modelSize}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Provider</p>
-              <p className="font-medium">{providers.find(p => p.id === config.provider)?.name}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Region</p>
-              <p className="font-medium">{config.region}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Instance</p>
-              <p className="font-medium">{config.instanceType}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Rate Limit</p>
-              <p className="font-medium">{config.rateLimiting} RPM</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {!isDeploying ? (
+        <>
+          <Card>
+            <CardHeader>
+              <CardTitle>Deployment Summary</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Industry</p>
+                    <p className="font-semibold">{selectedIndustry?.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Use Case</p>
+                    <p className="font-semibold">{config.useCase}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Model</p>
+                    <p className="font-semibold">{models.find(m => m.id === config.model)?.name}</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Region</p>
+                    <p className="font-semibold">{regions.find(r => r.id === config.region)?.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Compliance</p>
+                    <p className="font-semibold">{compliancePresets.find(c => c.id === config.compliance)?.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Monthly Cost</p>
+                    <p className="font-semibold text-primary text-xl">
+                      ${models.find(m => m.id === config.model)?.price}/month
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-      <Card className="bg-primary/5 border-primary/20">
-        <CardContent className="p-6 text-center">
-          <Rocket className="h-12 w-12 text-primary mx-auto mb-4" />
-          <h4 className="text-lg font-semibold mb-2">Ready to Deploy!</h4>
-          <p className="text-muted-foreground mb-4">
-            Your AI model will be provisioned and available within 5-10 minutes
-          </p>
-          <Button size="lg" className="w-full">
-            <Rocket className="h-5 w-5 mr-2" />
-            Deploy Now
-          </Button>
-        </CardContent>
-      </Card>
+          <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Rocket className="h-6 w-6 text-primary" />
+                <span>What We'll Deploy For You</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-primary/20 p-2 rounded-lg">
+                      <Cpu className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">GPU Infrastructure</p>
+                      <p className="text-sm text-muted-foreground">vLLM + quantized LLaMA 3 on dual A100s</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-primary/20 p-2 rounded-lg">
+                      <Database className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Vector Storage</p>
+                      <p className="text-sm text-muted-foreground">ChromaDB cluster for embeddings</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-primary/20 p-2 rounded-lg">
+                      <Brain className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">RAG Pipeline</p>
+                      <p className="text-sm text-muted-foreground">LlamaIndex configured for your industry</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-primary/20 p-2 rounded-lg">
+                      <Workflow className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Automation</p>
+                      <p className="text-sm text-muted-foreground">n8n with pre-built workflows</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-primary/20 p-2 rounded-lg">
+                      <MessageSquare className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Chat Interface</p>
+                      <p className="text-sm text-muted-foreground">Streamlit UI with your branding</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-primary/20 p-2 rounded-lg">
+                      <Lock className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Authentication</p>
+                      <p className="text-sm text-muted-foreground">JWT auth with user management</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-primary/20 p-2 rounded-lg">
+                      <BarChart3 className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Monitoring</p>
+                      <p className="text-sm text-muted-foreground">Audit logging & backup systems</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="bg-primary/20 p-2 rounded-lg">
+                      <Shield className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Security</p>
+                      <p className="text-sm text-muted-foreground">VPC, firewall, SSL certificates</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 pt-6 border-t">
+                <Button size="lg" className="w-full" onClick={startDeployment}>
+                  <Rocket className="h-5 w-5 mr-2" />
+                  Deploy Complete System (Est. 15-20 minutes)
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </>
+      ) : (
+        <Card>
+          <CardContent className="p-8">
+            <div className="text-center space-y-6">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                <Rocket className="h-8 w-8 text-primary animate-pulse" />
+              </div>
+              <div>
+                <h4 className="text-xl font-semibold mb-2">Deploying Your AI System</h4>
+                <p className="text-muted-foreground">
+                  Setting up your complete document processing infrastructure...
+                </p>
+              </div>
+              <div className="space-y-4">
+                <Progress value={deploymentProgress} className="w-full" />
+                <p className="text-sm text-muted-foreground">
+                  {deploymentProgress < 100 
+                    ? "Provisioning infrastructure and deploying services..." 
+                    : "🎉 Your AI system is ready! Check your email for access details."
+                  }
+                </p>
+              </div>
+              {deploymentProgress === 100 && (
+                <div className="space-y-4">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                      <p className="font-medium text-green-800">Deployment Successful!</p>
+                    </div>
+                    <p className="text-sm text-green-700 mt-1">
+                      Your AI document processing system is live and ready to use.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Button variant="outline" className="w-full">
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Open Chat Interface
+                    </Button>
+                    <Button variant="outline" className="w-full">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Upload Documents
+                    </Button>
+                    <Button variant="outline" className="w-full">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Manage System
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 
@@ -351,18 +661,18 @@ export default function Deploy() {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">AI Deployment Wizard</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">AI Document Processing Deployment</h1>
           <p className="text-muted-foreground">
-            Deploy your AI model to the cloud in 4 simple steps
+            Deploy a complete AI-powered document processing system in 4 steps
           </p>
         </div>
 
         {/* Progress Steps */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 overflow-x-auto">
           {steps.map((step, index) => (
-            <div key={step.number} className="flex items-center">
+            <div key={step.number} className="flex items-center min-w-0">
               <div className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors ${
                 currentStep >= step.number 
                   ? 'bg-primary border-primary text-primary-foreground' 
@@ -388,44 +698,48 @@ export default function Deploy() {
               </div>
               
               {index < steps.length - 1 && (
-                <ArrowRight className="h-4 w-4 text-muted-foreground mx-4" />
+                <ArrowRight className="h-4 w-4 text-muted-foreground mx-4 hidden sm:block" />
               )}
             </div>
           ))}
         </div>
 
         {/* Step Content */}
-        <Card className="mb-8">
-          <CardContent className="p-8">
-            {renderCurrentStep()}
-          </CardContent>
-        </Card>
+        <div className="mb-8">
+          {renderCurrentStep()}
+        </div>
 
         {/* Navigation */}
-        <div className="flex justify-between">
-          <Button 
-            variant="outline" 
-            onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-            disabled={currentStep === 1}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Previous
-          </Button>
-          
-          {currentStep < 4 ? (
+        {!isDeploying && (
+          <div className="flex justify-between">
             <Button 
-              onClick={() => setCurrentStep(currentStep + 1)}
-              disabled={!canProceed()}
+              variant="outline" 
+              onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+              disabled={currentStep === 1}
             >
-              Next
-              <ArrowRight className="h-4 w-4 ml-2" />
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Previous
             </Button>
-          ) : (
-            <Button disabled>
-              Deployment Complete
-            </Button>
-          )}
-        </div>
+            
+            {currentStep < 4 ? (
+              <Button 
+                onClick={() => setCurrentStep(currentStep + 1)}
+                disabled={!canProceed()}
+              >
+                Next
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            ) : deploymentProgress < 100 ? (
+              <Button disabled>
+                Deploying...
+              </Button>
+            ) : (
+              <Button disabled>
+                Deployment Complete
+              </Button>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );
