@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
-import { 
+import {
   Send,
   MessageSquare,
   FileText,
@@ -33,7 +33,7 @@ import {
   History,
   BookOpen,
   Target,
-  GitCompare
+  GitCompare,
 } from "lucide-react";
 
 interface Message {
@@ -74,22 +74,22 @@ const mockConversations: Conversation[] = [
     title: "Employment Contract Analysis",
     lastMessage: "What are the termination clauses in the contract?",
     timestamp: new Date("2024-01-15T14:30:00"),
-    messageCount: 8
+    messageCount: 8,
   },
   {
-    id: "2", 
+    id: "2",
     title: "Q4 Financial Review",
     lastMessage: "Compare revenue growth with previous quarters",
     timestamp: new Date("2024-01-15T10:15:00"),
-    messageCount: 12
+    messageCount: 12,
   },
   {
     id: "3",
     title: "Risk Assessment Review",
     lastMessage: "Identify potential compliance issues",
     timestamp: new Date("2024-01-14T16:45:00"),
-    messageCount: 5
-  }
+    messageCount: 5,
+  },
 ];
 
 const suggestedQuestions: SuggestedQuestion[] = [
@@ -97,51 +97,53 @@ const suggestedQuestions: SuggestedQuestion[] = [
     id: "1",
     text: "Summarize the key points from all uploaded contracts",
     category: "general",
-    icon: BookOpen
+    icon: BookOpen,
   },
   {
     id: "2",
     text: "What are the potential legal risks in the recent documents?",
-    category: "legal", 
-    icon: Target
+    category: "legal",
+    icon: Target,
   },
   {
     id: "3",
     text: "Compare Contract A vs Contract B terms and conditions",
     category: "analysis",
-    icon: GitCompare
+    icon: GitCompare,
   },
   {
     id: "4",
     text: "Show me a timeline of all mentioned events and dates",
     category: "analysis",
-    icon: Clock
+    icon: Clock,
   },
   {
     id: "5",
     text: "Calculate total financial commitments across all documents",
     category: "financial",
-    icon: FileText
-  }
+    icon: FileText,
+  },
 ];
 
 const mockMessages: Message[] = [
   {
     id: "1",
     type: "assistant",
-    content: "Hello! I'm your AI document assistant. I've analyzed your document library and I'm ready to help you with any questions about your contracts, reports, and other documents. What would you like to know?",
-    timestamp: new Date("2024-01-15T14:25:00")
+    content:
+      "Hello! I'm your AI document assistant. I've analyzed your document library and I'm ready to help you with any questions about your contracts, reports, and other documents. What would you like to know?",
+    timestamp: new Date("2024-01-15T14:25:00"),
   },
   {
-    id: "2", 
+    id: "2",
     type: "user",
     content: "What are the key terms in the employment contract for John Doe?",
-    timestamp: new Date("2024-01-15T14:26:00")
+    timestamp: new Date("2024-01-15T14:26:00"),
   },
   {
     id: "3",
-    type: "assistant", 
-    content: "Based on the employment contract for John Doe, here are the key terms:\n\n**Position & Compensation:**\n• Role: Senior Software Engineer\n• Base Salary: $120,000 annually\n• Bonus: Performance-based up to 15%\n• Stock Options: 1,000 shares vesting over 4 years\n\n**Benefits:**\n• Health, dental, and vision insurance\n• 401(k) with 4% company match\n• 3 weeks PTO + holidays\n• $2,000 annual learning budget\n\n**Key Clauses:**\n• 90-day probationary period\n• Non-compete for 12 months post-employment\n• Intellectual property assignment\n• Termination requires 2 weeks notice",
+    type: "assistant",
+    content:
+      "Based on the employment contract for John Doe, here are the key terms:\n\n**Position & Compensation:**\n• Role: Senior Software Engineer\n• Base Salary: $120,000 annually\n• Bonus: Performance-based up to 15%\n• Stock Options: 1,000 shares vesting over 4 years\n\n**Benefits:**\n• Health, dental, and vision insurance\n• 401(k) with 4% company match\n• 3 weeks PTO + holidays\n• $2,000 annual learning budget\n\n**Key Clauses:**\n• 90-day probationary period\n• Non-compete for 12 months post-employment\n• Intellectual property assignment\n• Termination requires 2 weeks notice",
     timestamp: new Date("2024-01-15T14:26:30"),
     sources: [
       {
@@ -149,24 +151,28 @@ const mockMessages: Message[] = [
         name: "Employment Contract - John Doe.pdf",
         page: 1,
         relevanceScore: 0.95,
-        excerpt: "Position: Senior Software Engineer, Base Salary: $120,000 per annum..."
+        excerpt:
+          "Position: Senior Software Engineer, Base Salary: $120,000 per annum...",
       },
       {
-        id: "1", 
+        id: "1",
         name: "Employment Contract - John Doe.pdf",
         page: 3,
         relevanceScore: 0.88,
-        excerpt: "Benefits package includes health insurance, 401(k) matching..."
-      }
+        excerpt:
+          "Benefits package includes health insurance, 401(k) matching...",
+      },
     ],
-    queryType: "simple"
-  }
+    queryType: "simple",
+  },
 ];
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [inputValue, setInputValue] = useState("");
-  const [selectedConversation, setSelectedConversation] = useState<string | null>("1");
+  const [selectedConversation, setSelectedConversation] = useState<
+    string | null
+  >("1");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -186,10 +192,10 @@ export default function Chat() {
       id: Date.now().toString(),
       type: "user",
       content: inputValue,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputValue("");
     setIsTyping(true);
 
@@ -198,7 +204,8 @@ export default function Chat() {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: "assistant",
-        content: "I'm analyzing your question and searching through your document library. This is a simulated response for demonstration purposes.",
+        content:
+          "I'm analyzing your question and searching through your document library. This is a simulated response for demonstration purposes.",
         timestamp: new Date(),
         sources: [
           {
@@ -206,11 +213,12 @@ export default function Chat() {
             name: "Sample Document.pdf",
             page: 2,
             relevanceScore: 0.92,
-            excerpt: "This is a sample excerpt from the document that relates to your question..."
-          }
-        ]
+            excerpt:
+              "This is a sample excerpt from the document that relates to your question...",
+          },
+        ],
       };
-      setMessages(prev => [...prev, assistantMessage]);
+      setMessages((prev) => [...prev, assistantMessage]);
       setIsTyping(false);
     }, 2000);
   };
@@ -229,40 +237,49 @@ export default function Chat() {
 
   const exportConversation = () => {
     const conversationText = messages
-      .map(msg => `${msg.type === 'user' ? 'You' : 'AI'}: ${msg.content}`)
-      .join('\n\n');
-    
-    const blob = new Blob([conversationText], { type: 'text/plain' });
+      .map((msg) => `${msg.type === "user" ? "You" : "AI"}: ${msg.content}`)
+      .join("\n\n");
+
+    const blob = new Blob([conversationText], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'conversation.txt';
+    a.download = "conversation.txt";
     a.click();
     URL.revokeObjectURL(url);
   };
 
   const renderMessage = (message: Message) => {
     const isUser = message.type === "user";
-    
+
     return (
-      <div key={message.id} className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
-        <div className={`flex max-w-[70%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-          <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-            isUser ? 'bg-primary ml-2' : 'bg-muted mr-2'
-          }`}>
+      <div
+        key={message.id}
+        className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4`}
+      >
+        <div
+          className={`flex max-w-[70%] ${isUser ? "flex-row-reverse" : "flex-row"}`}
+        >
+          <div
+            className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+              isUser ? "bg-primary ml-2" : "bg-muted mr-2"
+            }`}
+          >
             {isUser ? (
               <User className="h-4 w-4 text-primary-foreground" />
             ) : (
               <Bot className="h-4 w-4 text-muted-foreground" />
             )}
           </div>
-          <div className={`rounded-lg px-4 py-3 ${
-            isUser 
-              ? 'bg-primary text-primary-foreground' 
-              : 'bg-muted text-foreground border'
-          }`}>
+          <div
+            className={`rounded-lg px-4 py-3 ${
+              isUser
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-foreground border"
+            }`}
+          >
             <div className="whitespace-pre-wrap text-sm">{message.content}</div>
-            
+
             {/* Sources */}
             {message.sources && message.sources.length > 0 && (
               <div className="mt-3 pt-3 border-t border-muted-foreground/20">
@@ -271,7 +288,9 @@ export default function Chat() {
                   {message.sources.map((source, index) => (
                     <div key={index} className="bg-background/10 rounded p-2">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium">{source.name}</span>
+                        <span className="text-xs font-medium">
+                          {source.name}
+                        </span>
                         <div className="flex items-center space-x-1">
                           {source.page && (
                             <Badge variant="outline" className="text-xs">
@@ -283,8 +302,14 @@ export default function Chat() {
                           </Badge>
                         </div>
                       </div>
-                      <p className="text-xs opacity-80 italic">"{source.excerpt}"</p>
-                      <Button size="sm" variant="ghost" className="h-6 text-xs mt-1 p-1">
+                      <p className="text-xs opacity-80 italic">
+                        "{source.excerpt}"
+                      </p>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-6 text-xs mt-1 p-1"
+                      >
                         <ExternalLink className="h-3 w-3 mr-1" />
                         View
                       </Button>
@@ -293,11 +318,14 @@ export default function Chat() {
                 </div>
               </div>
             )}
-            
+
             {/* Message actions */}
             <div className="flex items-center justify-between mt-3 pt-2 border-t border-muted-foreground/20">
               <span className="text-xs opacity-60">
-                {message.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                {message.timestamp.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </span>
               {!isUser && (
                 <div className="flex items-center space-x-1">
@@ -322,7 +350,7 @@ export default function Chat() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-12rem)]">
           {/* Conversation Sidebar */}
@@ -338,18 +366,20 @@ export default function Chat() {
             <CardContent className="p-0">
               <ScrollArea className="h-[calc(100vh-20rem)]">
                 <div className="p-4 space-y-2">
-                  {mockConversations.map(conv => (
+                  {mockConversations.map((conv) => (
                     <div
                       key={conv.id}
                       className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                        selectedConversation === conv.id 
-                          ? 'bg-primary/10 border border-primary/20' 
-                          : 'hover:bg-muted/50'
+                        selectedConversation === conv.id
+                          ? "bg-primary/10 border border-primary/20"
+                          : "hover:bg-muted/50"
                       }`}
                       onClick={() => setSelectedConversation(conv.id)}
                     >
                       <div className="flex items-start justify-between mb-1">
-                        <h4 className="font-medium text-sm truncate">{conv.title}</h4>
+                        <h4 className="font-medium text-sm truncate">
+                          {conv.title}
+                        </h4>
                         <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
                           {conv.timestamp.toLocaleDateString()}
                         </span>
@@ -375,10 +405,16 @@ export default function Chat() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <MessageSquare className="h-5 w-5 text-primary" />
-                  <CardTitle className="text-base">AI Document Assistant</CardTitle>
+                  <CardTitle className="text-base">
+                    AI Document Assistant
+                  </CardTitle>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button size="sm" variant="outline" onClick={exportConversation}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={exportConversation}
+                  >
                     <Download className="h-4 w-4 mr-1" />
                     Export
                   </Button>
@@ -393,7 +429,7 @@ export default function Chat() {
               <ScrollArea className="flex-1 mb-4">
                 <div className="pr-4">
                   {messages.map(renderMessage)}
-                  
+
                   {/* Typing indicator */}
                   {isTyping && (
                     <div className="flex justify-start mb-4">
@@ -404,8 +440,14 @@ export default function Chat() {
                         <div className="rounded-lg px-4 py-3 bg-muted text-foreground border">
                           <div className="flex items-center space-x-1">
                             <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                            <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                            <div
+                              className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                              style={{ animationDelay: "0.1s" }}
+                            ></div>
+                            <div
+                              className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                              style={{ animationDelay: "0.2s" }}
+                            ></div>
                           </div>
                         </div>
                       </div>
@@ -429,7 +471,7 @@ export default function Chat() {
                       rows={1}
                     />
                   </div>
-                  <Button 
+                  <Button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isTyping}
                     className="px-3"
@@ -452,7 +494,7 @@ export default function Chat() {
             <CardContent>
               <ScrollArea className="h-[calc(100vh-20rem)]">
                 <div className="space-y-3">
-                  {suggestedQuestions.map(question => {
+                  {suggestedQuestions.map((question) => {
                     const IconComponent = question.icon;
                     return (
                       <Button
@@ -463,43 +505,63 @@ export default function Chat() {
                       >
                         <div className="flex items-start space-x-2">
                           <IconComponent className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                          <span className="text-xs leading-relaxed">{question.text}</span>
+                          <span className="text-xs leading-relaxed">
+                            {question.text}
+                          </span>
                         </div>
                       </Button>
                     );
                   })}
-                  
+
                   <div className="pt-4 border-t">
                     <h4 className="font-medium text-sm mb-3">Quick Actions</h4>
                     <div className="space-y-2">
-                      <Button variant="outline" size="sm" className="w-full justify-start">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full justify-start"
+                      >
                         <Search className="h-3 w-3 mr-2" />
                         Search Documents
                       </Button>
-                      <Button variant="outline" size="sm" className="w-full justify-start">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full justify-start"
+                      >
                         <History className="h-3 w-3 mr-2" />
                         View Chat History
                       </Button>
-                      <Button variant="outline" size="sm" className="w-full justify-start">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full justify-start"
+                      >
                         <Filter className="h-3 w-3 mr-2" />
                         Filter by Source
                       </Button>
                     </div>
                   </div>
-                  
+
                   <div className="pt-4 border-t">
                     <h4 className="font-medium text-sm mb-3">Document Stats</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Total Documents:</span>
+                        <span className="text-muted-foreground">
+                          Total Documents:
+                        </span>
                         <span className="font-medium">847</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Indexed Pages:</span>
+                        <span className="text-muted-foreground">
+                          Indexed Pages:
+                        </span>
                         <span className="font-medium">12,503</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Last Updated:</span>
+                        <span className="text-muted-foreground">
+                          Last Updated:
+                        </span>
                         <span className="font-medium">2 min ago</span>
                       </div>
                     </div>

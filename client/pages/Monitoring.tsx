@@ -7,7 +7,7 @@ export default function Monitoring() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center py-16">
           <div className="mx-auto max-w-md">
@@ -18,7 +18,8 @@ export default function Monitoring() {
               Advanced Monitoring
             </h1>
             <p className="text-muted-foreground mb-8">
-              Detailed analytics, performance metrics, and real-time monitoring dashboards will be available here.
+              Detailed analytics, performance metrics, and real-time monitoring
+              dashboards will be available here.
             </p>
             <Card className="text-left">
               <CardHeader>

@@ -21,7 +21,7 @@ import {
   Clock,
   Users,
   Target,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -29,15 +29,18 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">AI Document Processing Platform</h1>
+              <h1 className="text-3xl font-bold text-foreground">
+                AI Document Processing Platform
+              </h1>
               <p className="text-muted-foreground mt-2">
-                Intelligent document analysis powered by LLaMA 3 and automated workflows
+                Intelligent document analysis powered by LLaMA 3 and automated
+                workflows
               </p>
             </div>
             <Link to="/deploy">
@@ -84,7 +87,7 @@ export default function Index() {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <DeploymentStatus />
-          
+
           {/* Quick Actions */}
           <Card>
             <CardHeader>
@@ -131,28 +134,36 @@ export default function Index() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Legal Contracts</span>
+                  <span className="text-sm text-muted-foreground">
+                    Legal Contracts
+                  </span>
                   <div className="flex items-center space-x-2">
                     <Progress value={75} className="w-24" />
                     <span className="text-sm font-medium">456</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Financial Reports</span>
+                  <span className="text-sm text-muted-foreground">
+                    Financial Reports
+                  </span>
                   <div className="flex items-center space-x-2">
                     <Progress value={60} className="w-24" />
                     <span className="text-sm font-medium">234</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Meeting Notes</span>
+                  <span className="text-sm text-muted-foreground">
+                    Meeting Notes
+                  </span>
                   <div className="flex items-center space-x-2">
                     <Progress value={45} className="w-24" />
                     <span className="text-sm font-medium">189</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Research Papers</span>
+                  <span className="text-sm text-muted-foreground">
+                    Research Papers
+                  </span>
                   <div className="flex items-center space-x-2">
                     <Progress value={30} className="w-24" />
                     <span className="text-sm font-medium">78</span>
@@ -172,28 +183,36 @@ export default function Index() {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Query Accuracy</span>
+                  <span className="text-sm text-muted-foreground">
+                    Query Accuracy
+                  </span>
                   <div className="flex items-center space-x-2">
                     <Progress value={94} className="w-24" />
                     <span className="text-sm font-medium">94%</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Document Confidence</span>
+                  <span className="text-sm text-muted-foreground">
+                    Document Confidence
+                  </span>
                   <div className="flex items-center space-x-2">
                     <Progress value={89} className="w-24" />
                     <span className="text-sm font-medium">89%</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Workflow Success</span>
+                  <span className="text-sm text-muted-foreground">
+                    Workflow Success
+                  </span>
                   <div className="flex items-center space-x-2">
                     <Progress value={97} className="w-24" />
                     <span className="text-sm font-medium">97%</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">User Satisfaction</span>
+                  <span className="text-sm text-muted-foreground">
+                    User Satisfaction
+                  </span>
                   <div className="flex items-center space-x-2">
                     <Progress value={92} className="w-24" />
                     <span className="text-sm font-medium">4.6/5</span>
@@ -217,32 +236,48 @@ export default function Index() {
               <div className="flex items-center space-x-4 p-3 border rounded-lg">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">Document processed: Employment_Contract_2024.pdf</p>
-                  <p className="text-xs text-muted-foreground">Auto-summarized and indexed • 5 minutes ago</p>
+                  <p className="text-sm font-medium">
+                    Document processed: Employment_Contract_2024.pdf
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Auto-summarized and indexed • 5 minutes ago
+                  </p>
                 </div>
                 <Badge variant="secondary">Legal</Badge>
               </div>
               <div className="flex items-center space-x-4 p-3 border rounded-lg">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">Workflow "Daily Digest" completed successfully</p>
-                  <p className="text-xs text-muted-foreground">Email sent to 12 stakeholders • 2 hours ago</p>
+                  <p className="text-sm font-medium">
+                    Workflow "Daily Digest" completed successfully
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Email sent to 12 stakeholders • 2 hours ago
+                  </p>
                 </div>
                 <Badge variant="secondary">Automation</Badge>
               </div>
               <div className="flex items-center space-x-4 p-3 border rounded-lg">
                 <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">AI query: "Compare Q3 vs Q4 financial performance"</p>
-                  <p className="text-xs text-muted-foreground">Complex analysis completed in 3.2s • 4 hours ago</p>
+                  <p className="text-sm font-medium">
+                    AI query: "Compare Q3 vs Q4 financial performance"
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Complex analysis completed in 3.2s • 4 hours ago
+                  </p>
                 </div>
                 <Badge variant="secondary">Analysis</Badge>
               </div>
               <div className="flex items-center space-x-4 p-3 border rounded-lg">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">LLaMA 3 70B system deployed successfully</p>
-                  <p className="text-xs text-muted-foreground">CoreWeave us-east-1 • 6 hours ago</p>
+                  <p className="text-sm font-medium">
+                    LLaMA 3 70B system deployed successfully
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    CoreWeave us-east-1 • 6 hours ago
+                  </p>
                 </div>
                 <Badge variant="secondary">Infrastructure</Badge>
               </div>

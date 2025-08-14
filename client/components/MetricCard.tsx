@@ -12,7 +12,13 @@ interface MetricCardProps {
   color?: string;
 }
 
-export function MetricCard({ title, value, icon: Icon, trend, color = "text-primary" }: MetricCardProps) {
+export function MetricCard({
+  title,
+  value,
+  icon: Icon,
+  trend,
+  color = "text-primary",
+}: MetricCardProps) {
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -24,8 +30,10 @@ export function MetricCard({ title, value, icon: Icon, trend, color = "text-prim
       <CardContent>
         <div className="text-2xl font-bold text-foreground">{value}</div>
         {trend && (
-          <p className={`text-xs ${trend.isPositive ? 'text-green-600' : 'text-red-600'} mt-1`}>
-            {trend.isPositive ? '↗' : '↘'} {trend.value}
+          <p
+            className={`text-xs ${trend.isPositive ? "text-green-600" : "text-red-600"} mt-1`}
+          >
+            {trend.isPositive ? "↗" : "↘"} {trend.value}
           </p>
         )}
       </CardContent>
